@@ -33,6 +33,7 @@ mod pilot_things;
 mod postgresql;
 mod redis;
 mod thingsboard;
+mod thingerio;
 
 static GLOBAL_INTEGRATIONS: LazyLock<RwLock<Vec<Box<dyn Integration + Sync + Send>>>> =
     LazyLock::new(|| RwLock::new(Vec::new()));

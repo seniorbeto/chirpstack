@@ -419,6 +419,42 @@ service ApplicationService {
     };
   }
 
+  // Create Thinger.io integration.
+  rpc CreateThingerioIntegration(CreateThingerioIntegrationRequest)
+      returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post : "/api/applications/{integration.application_id}/integrations/"
+             "thingerio"
+      body : "*"
+    };
+  }
+
+  // Get Thingerio integration.
+  rpc GetThingerioIntegration(GetThingerioIntegrationRequest)
+      returns (GetThingerioIntegrationResponse) {
+    option (google.api.http) = {
+      get : "/api/applications/{application_id}/integrations/thingerio"
+    };
+  }
+
+  // Update Thingerio integration.
+  rpc UpdateThingerioIntegration(UpdateThingerioIntegrationRequest)
+      returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put : "/api/applications/{integration.application_id}/integrations/"
+            "thingerio"
+      body : "*"
+    };
+  }
+
+  // Delete Thingerio integration.
+  rpc DeleteThingerioIntegration(DeleteThingerioIntegrationRequest)
+      returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete : "/api/applications/{application_id}/integrations/thingerio"
+    };
+  }
+
   // Generates application ID specific client-certificate.
   rpc GenerateMqttIntegrationClientCertificate(
       GenerateMqttIntegrationClientCertificateRequest)
@@ -460,6 +496,7 @@ enum IntegrationKind {
   PILOT_THINGS = 8;
   MQTT_GLOBAL = 9;
   IFTTT = 10;
+  THINGERIO = 11;
 }
 
 message Application {
@@ -1149,3 +1186,30 @@ message ListApplicationDeviceTagsResponse {
   // Device tags.
   repeated ApplicationDeviceTagListItem result = 1;
 }
+
+message ThingerioIntegration {
+  string application_id = 1;
+  string server = 2;
+  string token = 3;
+}
+
+message CreateThingerioIntegrationRequest {
+  ThingerioIntegration integration = 1;
+}
+
+message GetThingerioIntegrationRequest {
+  string application_id = 1;
+}
+
+message GetThingerioIntegrationResponse {
+  ThingerioIntegration integration = 1;
+}
+
+message UpdateThingerioIntegrationRequest {
+  ThingerioIntegration integration = 1;
+}
+
+message DeleteThingerioIntegrationRequest {
+  string application_id = 1;
+}
+
