@@ -10,7 +10,7 @@ use serde::Serialize;
 use tracing::{info, trace};
 
 use super::Integration as IntegrationTrait;
-use crate::storage::application::PilotThingsConfiguration;
+use crate::storage::application::ThingerioConfiguration;
 use chirpstack_api::integration;
 
 static CLIENT: OnceLock<Client> = OnceLock::new();
@@ -32,8 +32,8 @@ pub struct Integration {
 }
 
 impl Integration {
-    pub fn new(conf: &PilotThingsConfiguration) -> Integration {
-        trace!("Initializing Pilot Things integration");
+    pub fn new(conf: &ThingerioConfiguration) -> Integration {
+        trace!("Initializing Thingerio integration");
 
         Integration {
             server: conf.server.clone(),
@@ -189,7 +189,7 @@ pub mod test {
     use httpmock::prelude::*;
 
     #[tokio::test]
-    async fn test_pilot_things() {
+    async fn test_thingerio() {
         let server = MockServer::start();
 
         let i = Integration {

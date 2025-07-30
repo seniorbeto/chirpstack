@@ -1968,22 +1968,6 @@ impl ApplicationService for Application {
         &self,
         request: Request<api::CreateThingerioIntegrationRequest>,
     ) -> Result<Response<()>, Status> {
-        let req = request.into_inner();
-
-        let v = serde_json::to_value(application::ThingerioConfiguration {
-            server: req.integration.server,
-            token: req.integration.token,
-        })
-            .map_err(|e| Status::internal(e.to_string()))?;
-
-        application::set_integration(
-            &req.integration.application_id,
-            api::IntegrationKind::Thingerio,
-            &v,
-        )
-            .await
-            .to_status()?;
-
         Ok(Response::new(()))
     }
 
@@ -1991,20 +1975,12 @@ impl ApplicationService for Application {
         &self,
         request: Request<api::GetThingerioIntegrationRequest>,
     ) -> Result<Response<api::GetThingerioIntegrationResponse>, Status> {
-        let req = request.into_inner();
-
-        let i = application::get_integration(&req.application_id, api::IntegrationKind::Thingerio)
-            .await
-            .to_status()?;
-
-        let conf: application::ThingerioConfiguration = serde_json::from_value(i.configuration)
-            .map_err(|e| Status::internal(e.to_string()))?;
 
         Ok(Response::new(api::GetThingerioIntegrationResponse {
             integration: Some(api::ThingerioIntegration {
-                application_id: req.application_id,
-                server: conf.server,
-                token: conf.token,
+                application_id: "".to_string(),
+                server: "".to_string(),
+                token: "".to_string(),
             }),
         }))
     }
@@ -2013,22 +1989,6 @@ impl ApplicationService for Application {
         &self,
         request: Request<api::UpdateThingerioIntegrationRequest>,
     ) -> Result<Response<()>, Status> {
-        let req = request.into_inner();
-
-        let v = serde_json::to_value(application::ThingerioConfiguration {
-            server: req.integration.server,
-            token: req.integration.token,
-        })
-            .map_err(|e| Status::internal(e.to_string()))?;
-
-        application::set_integration(
-            &req.integration.application_id,
-            api::IntegrationKind::Thingerio,
-            &v,
-        )
-            .await
-            .to_status()?;
-
         Ok(Response::new(()))
     }
 
@@ -2036,12 +1996,6 @@ impl ApplicationService for Application {
         &self,
         request: Request<api::DeleteThingerioIntegrationRequest>,
     ) -> Result<Response<()>, Status> {
-        let req = request.into_inner();
-
-        application::delete_integration(&req.application_id, api::IntegrationKind::Thingerio)
-            .await
-            .to_status()?;
-
         Ok(Response::new(()))
     }
 
