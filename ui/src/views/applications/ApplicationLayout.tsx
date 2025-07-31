@@ -200,6 +200,7 @@ function ApplicationLayout(props: IProps) {
             element={<EditIftttIntegration application={app} measurementKeys={props.measurementKeys} />}
           />
           <Route path="/integrations/thingerio/create" element={<CreateThingerioIntegration application={app} />} />
+          <Route path="/integrations/thingerio/edit" element={<EditThingerioIntegration application={app} />} />
         </Routes>
       </Card>
     </Space>

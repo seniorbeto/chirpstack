@@ -24,13 +24,13 @@ function ThingerCard(props: IProps) {
 
   if (props.add) {
     actions = [
-      <Link to="thinger/create">
+      <Link to="thingerio/create">
         <PlusOutlined />
       </Link>,
     ];
   } else {
     actions = [
-      <Link to="thinger/edit">
+      <Link to="thingerio/edit">
         <EditOutlined />
       </Link>,
       <Popconfirm title="Are you sure you want to delete this integration?" onConfirm={onDelete}>
