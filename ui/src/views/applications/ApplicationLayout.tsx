@@ -39,6 +39,8 @@ import EditThingsBoardIntegration from "./integrations/EditThingsBoardIntegratio
 import GenerateMqttCertificate from "./integrations/GenerateMqttCertificate";
 import CreateIftttIntegration from "./integrations/CreateIftttIntegration";
 import EditIftttIntegration from "./integrations/EditIftttIntegration";
+import CreateThingerioIntegration from "./integrations/CreateThingerioThingIntegration.tsx";
+import EditThingerioIntegration from "./integrations/EditThingerioIntegration.tsx";
 import { useTitle } from "../helpers";
 
 interface IProps {
@@ -197,6 +199,7 @@ function ApplicationLayout(props: IProps) {
             path="/integrations/ifttt/edit"
             element={<EditIftttIntegration application={app} measurementKeys={props.measurementKeys} />}
           />
+          <Route path="/integrations/thingerio/create" element={<CreateThingerioIntegration application={app} />} />
         </Routes>
       </Card>
     </Space>

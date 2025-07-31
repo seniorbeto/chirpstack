@@ -68,6 +68,11 @@ import type {
   ListApplicationDeviceProfilesResponse,
   ListApplicationDeviceTagsRequest,
   ListApplicationDeviceTagsResponse,
+  CreateThingerioIntegrationRequest,
+  GetThingerioIntegrationRequest,
+  GetThingerioIntegrationResponse,
+  UpdateThingerioIntegrationRequest,
+  DeleteThingerioIntegrationRequest,
 } from "@chirpstack/chirpstack-api-grpc-web/api/application_pb";
 
 import SessionStore from "./SessionStore";
@@ -783,6 +788,69 @@ class ApplicationStore extends EventEmitter {
 
       notification.success({
         message: "IFTTT integration deleted",
+        duration: 3,
+      });
+
+      this.emit("integration.delete");
+      callbackFunc();
+    });
+  };
+
+  createThingerioIntegration = (req: CreateThingerioIntegrationRequest, callbackFunc: () => void) => {
+    this.client.createThingerioIntegration(req, SessionStore.getMetadata(), err => {
+      if (err !== null) {
+        HandleError(err);
+        return;
+      }
+
+      notification.success({
+        message: "Pilot Things integration created",
+        duration: 3,
+      });
+
+      callbackFunc();
+    });
+  };
+
+  getThingerioIntegration = (
+    req: GetThingerioIntegrationRequest,
+    callbackFunc: (resp: GetThingerioIntegrationResponse) => void,
+  ) => {
+    this.client.getThingerioIntegration(req, SessionStore.getMetadata(), (err, resp) => {
+      if (err !== null) {
+        HandleError(err);
+        return;
+      }
+
+      callbackFunc(resp);
+    });
+  };
+
+  updateThingerioIntegration = (req: UpdateThingerioIntegrationRequest, callbackFunc: () => void) => {
+    this.client.updateThingerioIntegration(req, SessionStore.getMetadata(), err => {
+      if (err !== null) {
+        HandleError(err);
+        return;
+      }
+
+      notification.success({
+        message: "Pilot Things interation updated",
+        duration: 3,
+      });
+
+      callbackFunc();
+    });
+  };
+
+  deleteThingerioIntegration = (req: DeleteThingerioIntegrationRequest, callbackFunc: () => void) => {
+    this.client.deleteThingerioIntegration(req, SessionStore.getMetadata(), err => {
+      if (err !== null) {
+        HandleError(err);
+        return;
+      }
+
+      notification.success({
+        message: "Pilot Things interation deleted",
         duration: 3,
       });
 

@@ -21,6 +21,7 @@ import PilotThingsCard from "./integrations/PilotThingsCard";
 import LoRaCloudCard from "./integrations/LoRaCloudCard";
 import ThingsBoardCard from "./integrations/ThingsBoardCard";
 import IftttCard from "./integrations/IftttCard";
+import ThingerioCard from "./integrations/ThingerioCard.tsx";
 
 interface IProps {
   application: Application;
@@ -122,6 +123,13 @@ function ListIntegrations(props: IProps) {
           configured.push(<ThingsBoardCard application={props.application} />);
         } else {
           available.push(<ThingsBoardCard application={props.application} add />);
+        }
+
+        // Thinger io
+        if (includes(resp.getResultList(), IntegrationKind.THINGERIO)) {
+          configured.push(<ThingerioCard application={props.application} />);
+        } else {
+          available.push(<ThingerioCard application={props.application} add />);
         }
 
         setConfigured(configured);

@@ -15,9 +15,9 @@ interface IProps {
 
 function ThingerCard(props: IProps) {
   const onDelete = () => {
-    const req = new DeleteThingerIntegrationRequest();
+    const req = new DeleteThingerioIntegrationRequest();
     req.setApplicationId(props.application.getId());
-    ApplicationStore.deleteThingerIntegration(req, () => {});
+    ApplicationStore.deleteThingerioIntegration(req, () => {});
   };
 
   let actions: JSX.Element[] = [];
