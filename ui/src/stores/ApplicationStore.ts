@@ -804,7 +804,7 @@ class ApplicationStore extends EventEmitter {
       }
 
       notification.success({
-        message: "Pilot Things integration created",
+        message: "Thinger io integration created",
         duration: 3,
       });
 

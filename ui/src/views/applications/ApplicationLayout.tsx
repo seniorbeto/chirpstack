@@ -39,7 +39,7 @@ import EditThingsBoardIntegration from "./integrations/EditThingsBoardIntegratio
 import GenerateMqttCertificate from "./integrations/GenerateMqttCertificate";
 import CreateIftttIntegration from "./integrations/CreateIftttIntegration";
 import EditIftttIntegration from "./integrations/EditIftttIntegration";
-import CreateThingerioIntegration from "./integrations/CreateThingerioThingIntegration.tsx";
+import CreateThingerioIntegration from "./integrations/CreateThingerioIntegration.tsx";
 import EditThingerioIntegration from "./integrations/EditThingerioIntegration.tsx";
 import { useTitle } from "../helpers";
 

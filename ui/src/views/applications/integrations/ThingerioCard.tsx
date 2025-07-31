@@ -47,7 +47,7 @@ function ThingerCard(props: IProps) {
         cover={<img alt="thinger" src="/integrations/thinger_logo_white.png" style={{ padding: 1 }} />}
         actions={actions}
       >
-        <Card.Meta description="Thinger.io platform integration card." />
+        <Card.Meta description="The Thinger integration enables seamless forwarding messages to a Thinger.io instance" />
       </Card>
     </Col>
   );

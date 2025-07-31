@@ -1968,7 +1968,42 @@ impl ApplicationService for Application {
         &self,
         request: Request<api::CreateThingerioIntegrationRequest>,
     ) -> Result<Response<()>, Status> {
-        Ok(Response::new(()))
+        let req_int = match &request.get_ref().integration {
+            Some(v) => v,
+            None => {
+                return Err(Status::invalid_argument("integration is missing"));
+            }
+        };
+        let app_id = Uuid::from_str(&req_int.application_id).map_err(|e| e.status())?;
+
+        self.validator
+            .validate(
+                request.extensions(),
+                validator::ValidateApplicationAccess::new(validator::Flag::Update, app_id),
+            )
+            .await?;
+
+        let _ = application::create_integration(application::Integration {
+            application_id: app_id.into(),
+            kind: application::IntegrationKind::PilotThings,
+            configuration: application::IntegrationConfiguration::PilotThings(
+                application::PilotThingsConfiguration {
+                    server: req_int.server.clone(),
+                    token: req_int.token.clone(),
+                },
+            ),
+            ..Default::default()
+        })
+            .await
+            .map_err(|e| e.status())?;
+
+        let mut resp = Response::new(());
+        resp.metadata_mut().insert(
+            "x-log-application_id",
+            req_int.application_id.parse().unwrap(),
+        );
+
+        Ok(resp)
     }
 
     async fn get_thingerio_integration(
@@ -1976,20 +2011,79 @@ impl ApplicationService for Application {
         request: Request<api::GetThingerioIntegrationRequest>,
     ) -> Result<Response<api::GetThingerioIntegrationResponse>, Status> {
 
-        Ok(Response::new(api::GetThingerioIntegrationResponse {
-            integration: Some(api::ThingerioIntegration {
-                application_id: "".to_string(),
-                server: "".to_string(),
-                token: "".to_string(),
-            }),
-        }))
+        let req = request.get_ref();
+        let app_id = Uuid::from_str(&req.application_id).map_err(|e| e.status())?;
+
+        self.validator
+            .validate(
+                request.extensions(),
+                validator::ValidateApplicationAccess::new(validator::Flag::Read, app_id),
+            )
+            .await?;
+
+        let i = application::get_integration(&app_id, application::IntegrationKind::Thingerio)
+            .await
+            .map_err(|e| e.status())?;
+
+        if let application::IntegrationConfiguration::Thingerio(conf) = &i.configuration {
+            let mut resp = Response::new(api::GetThingerioIntegrationResponse{
+                integration: Some(api::ThingerioIntegration {
+                    application_id: app_id.to_string(),
+                    server: conf.server.clone(),
+                    token: conf.token.clone(),
+                }),
+            });
+            resp.metadata_mut()
+                .insert("x-log-application_id", req.application_id.parse().unwrap());
+
+            Ok(resp)
+        } else {
+            Err(Status::internal(
+                "Integration has no PilotThings configuration",
+            ))
+        }
     }
 
     async fn update_thingerio_integration(
         &self,
         request: Request<api::UpdateThingerioIntegrationRequest>,
     ) -> Result<Response<()>, Status> {
-        Ok(Response::new(()))
+        let req_int = match &request.get_ref().integration {
+            Some(v) => v,
+            None => {
+                return Err(Status::invalid_argument("integration is missing"));
+            }
+        };
+        let app_id = Uuid::from_str(&req_int.application_id).map_err(|e| e.status())?;
+
+        self.validator
+            .validate(
+                request.extensions(),
+                validator::ValidateApplicationAccess::new(validator::Flag::Update, app_id),
+            )
+            .await?;
+
+        let _ = application::update_integration(application::Integration {
+            application_id: app_id.into(),
+            kind: application::IntegrationKind::Thingerio,
+            configuration: application::IntegrationConfiguration::Thingerio(
+                application::ThingerioConfiguration {
+                    server: req_int.server.clone(),
+                    token: req_int.token.clone(),
+                },
+            ),
+            ..Default::default()
+        })
+            .await
+            .map_err(|e| e.status())?;
+
+        let mut resp = Response::new(());
+        resp.metadata_mut().insert(
+            "x-log-application_id",
+            req_int.application_id.parse().unwrap(),
+        );
+
+        Ok(resp)
     }
 
     async fn delete_thingerio_integration(
